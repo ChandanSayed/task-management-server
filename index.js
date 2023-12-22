@@ -36,18 +36,25 @@ async function run() {
     });
 
     app.get('/tasks/:uid', async (req, res) => {
+      // console.log(req.params);
       const response = await taskManagementCollection.find({ uId: req.params.uid }).toArray();
       res.send(response);
     });
 
     app.delete('/tasks/:id', async (req, res) => {
-      const response = await mmCartCartCollection.deleteOne({ _id: new ObjectId(req.params.id) });
+      const response = await taskManagementCollection.deleteOne({ _id: new ObjectId(req.params.id) });
       res.send(response);
     });
 
     app.put('/tasks/update-task/:id', async (req, res) => {
-      const { text } = req.body;
-      const response = await taskManagementCollection.findOneAndUpdate({ _id: new ObjectId(req.params.id) }, { $set: { text } });
+      const { deadline, description, priority, title } = req.body;
+      const response = await taskManagementCollection.findOneAndUpdate({ _id: new ObjectId(req.params.id) }, { $set: { deadline, description, priority, title } });
+      res.send(response);
+    });
+
+    app.put('/tasks/update-task-category/:id', async (req, res) => {
+      const { category } = req.body;
+      const response = await taskManagementCollection.findOneAndUpdate({ _id: new ObjectId(req.params.id) }, { $set: { category } });
       res.send(response);
     });
 
